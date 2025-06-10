@@ -89,14 +89,11 @@ pydub==0.25.1
 Pygments==2.19.1
 pyinstaller==6.13.0
 pyinstaller-hooks-contrib==2025.3
-pyo==1.0.5
 PyQt6==6.8.1
 PyQt6-Qt6==6.8.2
 PyQt6_sip==13.10.0
 python-dateutil==2.9.0.post0
 pytz==2025.1
-pywin32==310
-pywin32-ctypes==0.2.3
 PyYAML==6.0.2
 pyzmq==26.4.0
 referencing==0.36.2
