@@ -3,7 +3,7 @@
 
 
 ### Packages
-
+Uses Python 3.10
 The project requires very specific versions of some pip installs, else it may potentially crash.
 Here is the full `pip list`
 ```
