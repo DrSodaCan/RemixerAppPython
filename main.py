@@ -538,13 +538,11 @@ class AudioApp(QWidget):
     def toggle_play_stop(self):
         if not self.is_playing:
             for t in self.tracks:
-                t.position = 0
                 t.play()
             self.global_timer.start(100)
 
             self.play_button.setText('Stop')
             self.play_button.setStyleSheet(self.btn_style.format('#FF0000'))
-
             self.is_playing = True
         else:
             for t in self.tracks:
@@ -553,7 +551,6 @@ class AudioApp(QWidget):
 
             self.play_button.setText('Play')
             self.play_button.setStyleSheet(self.btn_style.format('#008000'))
-
             self.is_playing = False
 
     def reset_all(self):
