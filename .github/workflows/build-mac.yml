@@ -2,9 +2,9 @@ name: Build macOS GUI App
 
 on:
   push:
-    branches: [ main ]
+    branches: [ build-mac ]
   pull_request:
-    branches: [ main ]
+    branches: [ build-mac ]
   workflow_dispatch:
 
 jobs:
