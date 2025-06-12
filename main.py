@@ -16,6 +16,8 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QTimer, QThread, pyqtSignal
 from pedalboard import Pedalboard
+
+import utils
 from effects import get_available_effects, get_param_configs
 from splitter import convert_audio, spleeter_split, demucs_split
 
@@ -754,6 +756,8 @@ class AudioApp(QWidget):
             QMessageBox.information(self, 'Done', f'Saved to {save}')
 
 if __name__ == '__main__':
+    utils.check_demucs_installed()
+
     app = QApplication(sys.argv)
     app.setStyleSheet(
         "QWidget { color: white; background-color: #202020; }\n"

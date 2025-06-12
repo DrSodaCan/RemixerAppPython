@@ -2,6 +2,9 @@
 import os
 import platform
 import shutil
+import subprocess
+import sys
+
 
 def get_cache_dir():
     """Return a folder for caching song data, depending on the OS."""
@@ -25,3 +28,52 @@ def cache_file(file_path: str) -> str:
     if not os.path.exists(cached_file):
         shutil.copy2(file_path, cached_file)
     return cached_file
+
+
+
+def check_demucs_installed():
+    try:
+        # Try the simplest import
+        import demucs  # noqa: F401
+    except ImportError:
+        # Lazy-load Qt so we only pull in GUI if needed
+        from PyQt6.QtWidgets import QApplication, QMessageBox
+
+        # We need a QApplication to show QMessageBox
+        app = QApplication(sys.argv)
+
+        reply = QMessageBox.question(
+            None,
+            "Missing Dependency",
+            "Demucs is not installed.\n\nWould you like to install it now?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            # Some PyInstaller builds might not include pip, so bootstrap it
+            try:
+                import ensurepip
+                ensurepip.bootstrap()
+            except Exception:
+                pass
+
+            # Install Demucs (using --user to avoid system permission issues)
+            try:
+                subprocess.check_call([
+                    sys.executable, "-m", "pip", "install", "--user", "demucs"
+                ])
+            except subprocess.CalledProcessError as e:
+                QMessageBox.critical(
+                    None,
+                    "Installation Failed",
+                    f"Could not install Demucs:\n{e}"
+                )
+                sys.exit(1)
+
+            QMessageBox.information(
+                None,
+                "Installed",
+                "Demucs has been installed successfully.\n\n"
+                "Please restart the application to continue."
+            )
+        # Either they declined, or we just told them to restart
+        sys.exit(0)
