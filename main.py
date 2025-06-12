@@ -537,6 +537,12 @@ class AudioApp(QWidget):
 
     def toggle_play_stop(self):
         if not self.is_playing:
+            #check already finished
+            for t in self.tracks:
+                if t.audio_data is not None and t.position >= len(t.audio_data):
+                    t.position = 0
+                    t.update_time()
+
             for t in self.tracks:
                 t.play()
             self.global_timer.start(100)
@@ -608,6 +614,24 @@ class AudioApp(QWidget):
                 sample_rate = t.sample_rate
             if t.position > max_pos:
                 max_pos = t.position
+
+        if self.is_playing and max_pos >= max_len:
+            # stop playback
+            for t in self.tracks:
+                t.stop()
+                t.position = 0
+                t.update_time()
+            self.global_timer.stop()
+            # reset UI
+            self.global_slider.blockSignals(True)
+            self.global_slider.setValue(0)
+            self.global_slider.blockSignals(False)
+            self.global_time_label.setText("00:00 / " + format_time(max_len / sample_rate))
+            self.play_button.setText('Play')
+            self.play_button.setStyleSheet(self.btn_style.format('#008000'))
+            self.is_playing = False
+            return
+
 
         #update slider
         val = int((max_pos / max_len) * 1000)
