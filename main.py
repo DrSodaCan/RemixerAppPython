@@ -532,7 +532,7 @@ class AudioApp(QWidget):
         main_layout.addLayout(tracks_layout, 1)
 
         self.setLayout(main_layout)
-        self.setWindowTitle('Remixer Demo')
+        self.setWindowTitle('Remix Splitter')
         self.resize(1920, 1080)
 
     def toggle_play_stop(self):
