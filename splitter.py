@@ -10,7 +10,7 @@ import torchaudio
 from spleeter.separator import Separator
 
 from utils import cache_file, get_cache_dir
-
+#splitter.py
 def convert_audio(file_path: str) -> str:
     """Checks if a file is a .wav or .mp3, the only supported file formats from Demucs and Spleeter"""
     SUPPORTED_FORMATS = {".mp3", ".wav"}
@@ -55,6 +55,7 @@ async def spleeter_split(file_path: str, output_dir: str = None) -> tuple:
 
 async def demucs_split(file_path: str, output_dir: str = None) -> tuple:
     """Splits a song into stems using Demucs and caches the result."""
+    model = pretrained.get_model("htdemucs", device="cpu")
     if output_dir is None:
         output_dir = os.path.join(get_cache_dir(), "Demucs_Output")
     os.makedirs(output_dir, exist_ok=True)
