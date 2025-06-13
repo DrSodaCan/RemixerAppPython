@@ -19,7 +19,7 @@ from pedalboard import Pedalboard
 
 import utils
 from effects import get_available_effects, get_param_configs
-from splitter import convert_audio, spleeter_split, demucs_split
+from splitter import convert_audio, demucs_split, spleeter_split
 
 
 def format_time(seconds: float) -> str:

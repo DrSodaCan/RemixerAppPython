@@ -19,7 +19,7 @@ def convert_audio(file_path: str) -> str:
         return cache_file(file_path)
     else:
         cache_dir = get_cache_dir()
-        # Save converted file into the cache folder.
+        #cache converted file
         cached_file = os.path.join(cache_dir, os.path.splitext(os.path.basename(file_path))[0] + ".wav")
         if not os.path.exists(cached_file):
             print(f"Converting {file_path} to WAV format...")
@@ -39,12 +39,12 @@ async def spleeter_split(file_path: str, output_dir: str = None) -> tuple:
     track_folder = os.path.join(output_dir, base_name)
     expected_tracks = ("vocals.wav", "drums.wav", "bass.wav", "other.wav")
 
-    #Check if exists
+    #check cache
     if os.path.isdir(track_folder) and all(os.path.exists(os.path.join(track_folder, t)) for t in expected_tracks):
         print(f"Cache hit: Using previously split files from {track_folder}")
         return tuple(os.path.join(track_folder, t) for t in expected_tracks)
 
-    #Was not in cache; start actually splitting
+    #cache miss; split now
     print("Cache miss: Running Spleeter splitting process...")
     separator = Separator("spleeter:4stems")
     loop = asyncio.get_event_loop()
@@ -63,13 +63,13 @@ async def demucs_split(file_path: str, output_dir: str = None) -> tuple:
     song_output_folder = os.path.join(output_dir, "htdemucs", base_name)
     stem_files = ("bass.wav", "drums.wav", "other.wav", "vocals.wav")
 
-    # Check if the output folder exists with all required stem files.
+    #check cache
     if os.path.isdir(song_output_folder) and all(
             os.path.exists(os.path.join(song_output_folder, s)) for s in stem_files):
         print(f"Cache hit: Using previously split files from {song_output_folder}")
         return tuple(os.path.join(song_output_folder, s) for s in stem_files)
 
-    # Otherwise, perform the Demucs splitting.
+    #cache miss; split now
     print("Cache miss: Running Demucs splitting process...")
     process = await asyncio.create_subprocess_exec(
         "demucs", "--out", output_dir, file_path,
